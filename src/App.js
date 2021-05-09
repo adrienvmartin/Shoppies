@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Grid, Paper, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { key } from './api';
 import axios from 'axios';
 import Banner from './components/Banner';
 import Results from './components/Results';
@@ -27,6 +26,8 @@ const useStyles = makeStyles(() => ({
     color: 'white'
   }
 }));
+
+const key = process.env.API_KEY;
 
 const App = () => {
   const classes = useStyles();
