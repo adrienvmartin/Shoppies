@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { Grid, Paper, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -40,7 +40,7 @@ const App = () => {
       })
     };
     fetchData(key);
-  }, [setData, searchTerm, nominations, setNom]);
+  }, [setData, searchTerm]);
 
   useEffect(() => {
     if (nominations.length > 4) {
@@ -48,12 +48,8 @@ const App = () => {
     } else {
       setBanner(false);
     }
+   
   }, [nominations, setBanner]);
-
-  useEffect(() => {
-    setNom(nominations);
-  }, [nominations, setNom]);
-
   
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -76,7 +72,6 @@ const App = () => {
         }
       ]);
       setNomButton(true);
-      // console.log('nominations: ', nominations);
     } else {
       setNomButton(true);
     }
@@ -86,7 +81,7 @@ const App = () => {
     const index = nominations.findIndex(x => x.id === id);
     nominations.splice(index, 1);
     setNomButton(false);
-    setNom(nominations);
+    setNom([...nominations]);
   }
 
   return (
