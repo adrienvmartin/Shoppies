@@ -40,15 +40,21 @@ const App = () => {
       })
     };
     fetchData(key);
+  }, [setData, searchTerm, nominations, setNom]);
+
+  useEffect(() => {
     if (nominations.length > 4) {
       setBanner(true);
     } else {
       setBanner(false);
     }
-    
-    console.log('nominations after useEffect: ', nominations);
-  }, [searchTerm, nominations]);
+  }, [nominations, setBanner]);
 
+  useEffect(() => {
+    setNom(nominations);
+  }, [nominations, setNom]);
+
+  
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     setNomButton(false);
