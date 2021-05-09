@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const key = process.env.API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const App = () => {
   const classes = useStyles();
@@ -38,14 +38,15 @@ const App = () => {
   const [banner, setBanner] = useState(false);
 
   useEffect(() => {
-    async function fetchData(key) {
-      const res = await axios(`http://www.omdbapi.com/?apikey=${key}&t=${searchTerm}`);
+    async function fetchData(api) {
+      const res = await axios(`http://www.omdbapi.com/?apikey=${api}&t=${searchTerm}`);
       setData({
         title: res.data.Title,
         year: res.data.Year,
       })
     };
-    fetchData(key);
+    fetchData(api);
+    console.log('api: ', api);
   }, [setData, searchTerm]);
 
   useEffect(() => {
