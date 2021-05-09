@@ -27,14 +27,15 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [data, setData] = useState({});
   const [nominations, setNom] = useState([]);
+  const [nomButton, setNomButton] = useState(false);
 
   useEffect(() => {
     async function fetchData(key) {
       const res = await axios(`http://www.omdbapi.com/?apikey=${key}&t=${searchTerm}`);
       setData({
+        id: res.data.imdbID,
         title: res.data.Title,
         year: res.data.Year,
-        id: res.data.imdbID,
       })
     };
     fetchData(key);
@@ -42,16 +43,38 @@ const App = () => {
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
+    setNomButton(false);
   };
 
-  const handleNom = () => {
-    setNom([
-      ...nominations,
-      {
-        title: data.title,
-        year: data.year,
-      }
-    ]);
+  const addNom = (id, title, year) => {
+    const nomIds = [];
+    nominations.forEach(n => nomIds.push(n.id));
+
+    const already = nomIds.includes(id);
+
+    if (!already) {
+      setNom([
+        ...nominations,
+        {
+          id,
+          title,
+          year,
+        }
+      ]);
+      setNomButton(true);
+      console.log('state.data: ', data);
+      console.log('state.nom: ', nominations);
+    } else {
+      setNomButton(true);
+    }
+  }
+
+  const removeNom = (id) => {
+    const index = nominations.findIndex(x => x.id === id);
+    console.log(index);
+    nominations.splice(index, 1);
+    setNom(nominations);
+    console.log(nominations);
   }
 
   return (
@@ -75,14 +98,15 @@ const App = () => {
           >
             <h4>Results for "{searchTerm}":</h4>
             <br />
-            {data.title ? <div>• {data.title} ({data.year})<Button className={classes.button} variant="contained" color="default" onClick={handleNom}>Nominate</Button> </div> : null }
+            {data.title ? <div>• {data.title} ({data.year})<Button className={classes.button} variant="contained" color="default" onClick={(id) => addNom(data.id, data.title, data.year)} disabled={nomButton}>Nominate</Button> </div> : null }
           </Paper>
         </Grid>
         <Grid item>
           <Paper className={classes.paper}>
             <h4>Nominations</h4>
             <br />
-            {nominations.length > 0 ? nominations.map(n => { return (<div key={Math.random()}><br />• {n.title} {n.year}</div>)}) : null}
+            {nominations.length > 0 ? nominations.map(n => {
+              return (<div key={n.id}><br />• {n.title} {n.year} <Button className={classes.button} variant="contained" color="default" onClick={() => removeNom(n.id)}>Remove</Button></div>)}) : null}
           </Paper>
         </Grid>
       </Grid>
