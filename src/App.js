@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Grid, Paper, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -50,7 +50,7 @@ const App = () => {
     }
    
   }, [nominations, setBanner]);
-  
+
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     setNomButton(false);
