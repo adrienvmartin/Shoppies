@@ -39,7 +39,7 @@ const App = () => {
 
   useEffect(() => {
     async function fetchData(api) {
-      const res = await axios(`http://www.omdbapi.com/?apikey=${api}&t=${searchTerm}`);
+      const res = await axios(`https://www.omdbapi.com/?apikey=${api}&t=${searchTerm}`);
       setData({
         title: res.data.Title,
         year: res.data.Year,
