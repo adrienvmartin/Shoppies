@@ -46,7 +46,7 @@ const App = () => {
       })
     };
     fetchData(api);
-    console.log('api: ', api);
+    console.log('api: ', process.env);
   }, [setData, searchTerm]);
 
   useEffect(() => {
