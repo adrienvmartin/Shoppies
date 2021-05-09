@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Grid, Paper, TextField, Button } from '@material-ui/core';
+import { Grid, Paper, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { key } from './api';
 import axios from 'axios';
 import Banner from './components/Banner';
+import Results from './components/Results';
+import Nominations from './components/Nominations';
 
 const useStyles = makeStyles(() => ({
-  root: {
-    backgroundColor: 'lightgrey'
-  },
   textField: {
     width: '50ch',
     margin: 8,
@@ -23,7 +22,9 @@ const useStyles = makeStyles(() => ({
   },
   banner: {
     padding: 20,
-    margin: 10
+    margin: 10,
+    backgroundColor: 'green',
+    color: 'white'
   }
 }));
 
@@ -39,7 +40,6 @@ const App = () => {
     async function fetchData(key) {
       const res = await axios(`http://www.omdbapi.com/?apikey=${key}&t=${searchTerm}`);
       setData({
-        id: res.data.imdbID,
         title: res.data.Title,
         year: res.data.Year,
       })
@@ -56,28 +56,30 @@ const App = () => {
    
   }, [nominations, setBanner]);
 
+  useEffect(() => {
+    setNomButton(true);
+  }, [setNom])
+
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     setNomButton(false);
   };
 
-  const addNom = (id, title, year) => {
-    const nomIds = [];
-    nominations.forEach(n => nomIds.push(n.id));
-
-    const already = nomIds.includes(id);
-
+  const addNom = (title, year) => {
+    const titles = [];
+    nominations.forEach(n => titles.push(n.title));
+    const already = titles.includes(title);
     if (!already) {
       setNom([
         ...nominations,
         {
-          id,
           title,
           year,
         }
       ]);
       setNomButton(true);
     } else {
+      
       setNomButton(true);
     }
   }
@@ -89,8 +91,13 @@ const App = () => {
     setNom([...nominations]);
   }
 
+  const clearNoms = () => {
+    setNomButton(false);
+    setNom([]);
+  }
+
   return (
-    <div className={classes.root}>
+    <div>
       <Grid container direction="column" justify="center" alignItems="center">
           <h1>The Shoppies</h1>
         <Paper className={classes.paper}>
@@ -101,28 +108,28 @@ const App = () => {
               onChange={handleChange}
             />
           </Grid>
-          
         </Paper>
       {banner ? <Banner style={classes.banner} noms={nominations.length} /> : null}
           </Grid>
       <Grid container direction="row" justify="center" alignItems="flex-start">
-        <Grid item>
-          <Paper
-            className={classes.paper}
-          >
-            <h4>Results for "{searchTerm}":</h4>
-            <br />
-            {data.title ? <div>• {data.title} ({data.year})<Button className={classes.button} variant="contained" color="default" onClick={(id) => addNom(data.id, data.title, data.year)} disabled={nomButton}>Nominate</Button> </div> : null }
-          </Paper>
-        </Grid>
-        <Grid item>
-          <Paper className={classes.paper}>
-            <h4>Nominations</h4>
-            <br />
-            {nominations.length > 0 ? nominations.map(n => {
-              return (<div key={n.id}><br />• {n.title} {n.year} <Button className={classes.button} variant="contained" color="default" onClick={() => removeNom(n.id)}>Remove</Button></div>)}) : null}
-          </Paper>
-        </Grid>
+      <Results
+            paperClass={classes.paper}
+            buttonClass={classes.button}
+            searchTerm={searchTerm}
+            data={data}
+            id={data.id}
+            title={data.title}
+            year={data.year}
+            nomButton={nomButton}
+            addNom={addNom}
+            />
+        <Nominations
+          paperClass={classes.paper}
+          buttonClass={classes.button}
+          nominations={nominations}
+          clearNoms={clearNoms}
+          removeNom={removeNom}
+        />
       </Grid>
     </div>
   );
