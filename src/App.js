@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import { key } from './api';
 import axios from 'axios';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     backgroundColor: 'lightgrey'
   },
@@ -28,6 +28,7 @@ const App = () => {
   const [data, setData] = useState({});
   const [nominations, setNom] = useState([]);
   const [nomButton, setNomButton] = useState(false);
+  const [banner, setBanner] = useState(false);
 
   useEffect(() => {
     async function fetchData(key) {
@@ -39,7 +40,14 @@ const App = () => {
       })
     };
     fetchData(key);
-  }, [searchTerm]);
+    if (nominations.length > 4) {
+      setBanner(true);
+    } else {
+      setBanner(false);
+    }
+    
+    console.log('nominations after useEffect: ', nominations);
+  }, [searchTerm, nominations]);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -62,8 +70,7 @@ const App = () => {
         }
       ]);
       setNomButton(true);
-      console.log('state.data: ', data);
-      console.log('state.nom: ', nominations);
+      // console.log('nominations: ', nominations);
     } else {
       setNomButton(true);
     }
@@ -71,10 +78,9 @@ const App = () => {
 
   const removeNom = (id) => {
     const index = nominations.findIndex(x => x.id === id);
-    console.log(index);
     nominations.splice(index, 1);
+    setNomButton(false);
     setNom(nominations);
-    console.log(nominations);
   }
 
   return (
@@ -91,7 +97,8 @@ const App = () => {
           </Grid>
         </Paper>
           </Grid>
-        <Grid container direction="row" justify="center" alignItems="flex-start">
+      <Grid container direction="row" justify="center" alignItems="flex-start">
+        {banner ? <div>Banner!</div> : null}
         <Grid item>
           <Paper
             className={classes.paper}
