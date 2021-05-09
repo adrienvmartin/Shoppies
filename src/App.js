@@ -4,6 +4,7 @@ import { Grid, Paper, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { key } from './api';
 import axios from 'axios';
+import Banner from './components/Banner';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -19,6 +20,10 @@ const useStyles = makeStyles(() => ({
   },
   button: {
     margin: 10,
+  },
+  banner: {
+    padding: 20,
+    margin: 10
   }
 }));
 
@@ -96,10 +101,11 @@ const App = () => {
               onChange={handleChange}
             />
           </Grid>
+          
         </Paper>
+      {banner ? <Banner style={classes.banner} noms={nominations.length} /> : null}
           </Grid>
       <Grid container direction="row" justify="center" alignItems="flex-start">
-        {banner ? <div>Banner!</div> : null}
         <Grid item>
           <Paper
             className={classes.paper}
