@@ -25,6 +25,12 @@ const useStyles = makeStyles(() => ({
     margin: 10,
     backgroundColor: 'green',
     color: 'white'
+  },
+  modal: {
+    padding: 20,
+    margin: 10,
+    width: 550,
+    height: 400,
   }
 }));
 
@@ -101,14 +107,6 @@ const App = () => {
     setNom([]);
   }
 
-  const getDetails = () => {
-    setOpen(true);
-  }
-
-  const closeModal = () => {
-    setOpen(false);
-  }
-
   const setModal = (param) => {
     setOpen(param);
   }
@@ -145,6 +143,7 @@ const App = () => {
           open={open}
           handleClose={() => setModal(false)}
           details={data}
+          paperClass={classes.modal}
           />
         <Nominations
           paperClass={classes.paper}
