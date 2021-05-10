@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Paper, Button } from '@material-ui/core';
 
-const Results = ({ paperClass, buttonClass, searchTerm, data: { title, year }, nomButton, addNom }) => {
+const Results = ({ paperClass, buttonClass, searchTerm, data: { title, year }, nomButton, addNom, getDetails }) => {
   return (
   <Grid item>
   <Paper
@@ -9,7 +9,7 @@ const Results = ({ paperClass, buttonClass, searchTerm, data: { title, year }, n
   >
     <h4>Results for "{searchTerm}":</h4>
     <br />
-    {title ? <div>• {title} ({year})<Button className={buttonClass} variant="contained" color="default" onClick={(id) => addNom(title, year)} disabled={nomButton}>Nominate</Button> </div> : null }
+    {title ? <div>• {title} ({year})<Button className={buttonClass} variant="contained" color="default" onClick={(id) => addNom(title, year)} disabled={nomButton}>Nominate</Button><Button className={buttonClass} variant="contained" color="default" onClick={() => getDetails()}>Details</Button> </div> : null }
   </Paper>
     </Grid>
   )

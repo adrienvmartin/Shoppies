@@ -6,6 +6,7 @@ import axios from 'axios';
 import Banner from './components/Banner';
 import Results from './components/Results';
 import Nominations from './components/Nominations';
+import InfoModal from './components/Modal';
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -24,6 +25,11 @@ const useStyles = makeStyles(() => ({
     margin: 10,
     backgroundColor: 'green',
     color: 'white'
+  },
+  modal: {
+    padding: 20,
+    margin: 10,
+    width: 550,
   }
 }));
 
@@ -36,6 +42,7 @@ const App = () => {
   const [nominations, setNom] = useState([]);
   const [nomButton, setNomButton] = useState(false);
   const [banner, setBanner] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData(api) {
@@ -43,6 +50,8 @@ const App = () => {
       setData({
         title: res.data.Title,
         year: res.data.Year,
+        plot: res.data.Plot,
+        rating: res.data.imdbRating,
       })
     };
     fetchData(api);
@@ -97,6 +106,10 @@ const App = () => {
     setNom([]);
   }
 
+  const setModal = (param) => {
+    setOpen(param);
+  }
+
   return (
     <div>
       <Grid container direction="column" justify="center" alignItems="center">
@@ -112,7 +125,7 @@ const App = () => {
         </Paper>
       {banner ? <Banner style={classes.banner} noms={nominations.length} /> : null}
           </Grid>
-      <Grid container direction="row" justify="center" alignItems="flex-start">
+      <Grid container direction="column" justify="center" alignItems="center">
       <Results
             paperClass={classes.paper}
             buttonClass={classes.button}
@@ -122,8 +135,15 @@ const App = () => {
             title={data.title}
             year={data.year}
             nomButton={nomButton}
-            addNom={addNom}
-            />
+          addNom={addNom}
+          getDetails={() => setModal(true)}
+        />
+        <InfoModal
+          open={open}
+          handleClose={() => setModal(false)}
+          details={data}
+          paperClass={classes.modal}
+          />
         <Nominations
           paperClass={classes.paper}
           buttonClass={classes.button}
