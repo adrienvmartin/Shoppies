@@ -30,7 +30,6 @@ const useStyles = makeStyles(() => ({
     padding: 20,
     margin: 10,
     width: 550,
-    height: 400,
   }
 }));
 
@@ -126,7 +125,7 @@ const App = () => {
         </Paper>
       {banner ? <Banner style={classes.banner} noms={nominations.length} /> : null}
           </Grid>
-      <Grid container direction="row" justify="center" alignItems="flex-start">
+      <Grid container direction="column" justify="center" alignItems="center">
       <Results
             paperClass={classes.paper}
             buttonClass={classes.button}
