@@ -6,6 +6,7 @@ import axios from 'axios';
 import Banner from './components/Banner';
 import Results from './components/Results';
 import Nominations from './components/Nominations';
+import InfoModal from './components/Modal';
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -36,6 +37,7 @@ const App = () => {
   const [nominations, setNom] = useState([]);
   const [nomButton, setNomButton] = useState(false);
   const [banner, setBanner] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData(api) {
@@ -43,6 +45,8 @@ const App = () => {
       setData({
         title: res.data.Title,
         year: res.data.Year,
+        plot: res.data.Plot,
+        rating: res.data.imdbRating,
       })
     };
     fetchData(api);
@@ -97,6 +101,18 @@ const App = () => {
     setNom([]);
   }
 
+  const getDetails = () => {
+    setOpen(true);
+  }
+
+  const closeModal = () => {
+    setOpen(false);
+  }
+
+  const setModal = (param) => {
+    setOpen(param);
+  }
+
   return (
     <div>
       <Grid container direction="column" justify="center" alignItems="center">
@@ -122,8 +138,14 @@ const App = () => {
             title={data.title}
             year={data.year}
             nomButton={nomButton}
-            addNom={addNom}
-            />
+          addNom={addNom}
+          getDetails={() => setModal(true)}
+        />
+        <InfoModal
+          open={open}
+          handleClose={() => setModal(false)}
+          details={data}
+          />
         <Nominations
           paperClass={classes.paper}
           buttonClass={classes.button}
