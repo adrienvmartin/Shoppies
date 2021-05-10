@@ -1,9 +1,10 @@
 import React from 'react';
-import { Modal, Paper, Fade, Grid } from '@material-ui/core';
+import { Modal, Dialog, Paper, Fade, Grid, Button } from '@material-ui/core';
 
 const InfoModal = ({ open, handleClose, details, paperClass }) => {
   return (
     <React.Fragment>
+      <Dialog onClose={handleClose} open={open} onBackdropClick={handleClose}>
       <Modal
         open={open}
         onClose={handleClose}
@@ -14,14 +15,18 @@ const InfoModal = ({ open, handleClose, details, paperClass }) => {
         <div>
           <h1>{details.title}</h1>
           <br />
-          Rated {details.rating} on IMDB.
+          Rated {details.rating}/10 on IMDB.
           <br />
-          Plot: {details.plot}
-            </div>
+          <br />
+          {details.plot}
+              </div>
+              <br />
+        <Button variant="contained" color="default" onClick={handleClose}>Close</Button>
             </Paper>
             </Grid>
           </Fade>
         </Modal>
+        </Dialog>
     </React.Fragment>
   )
 }
